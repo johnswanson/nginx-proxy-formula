@@ -1,0 +1,12 @@
+{% set nginx_proxy = salt['grains.filter_by']({
+    'x86_64': {
+        'port': '8080',
+        'cert': '/etc/nginx/nginx.crt',
+        'key': '/etc/nginx/nginx.key'
+    },
+    'x86': {
+        'port': '8080',
+        'cert': '/etc/nginx/nginx.crt',
+        'key': '/etc/nginx/nginx.key'
+    }
+}, merge=salt['pillar.get']('nginx_proxy:lookup'), grain='cpuarch', default='x86_64') %}
