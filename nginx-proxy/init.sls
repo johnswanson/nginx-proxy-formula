@@ -20,7 +20,7 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
       - file: /etc/nginx/ssl.conf
     - prereq:
       - file: /etc/nginx/sites-available/proxy.conf
-      - pkg: nginx
+      - service: nginx
 
 /etc/nginx/sites-available/proxy.conf:
   file.managed:
@@ -35,7 +35,7 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - group: www-data
     - mode: 0755
     - prereq:
-      - pkg: nginx
+      - service: nginx
 
 /etc/nginx/sites-enabled/proxy.conf:
   file.symlink:
@@ -44,5 +44,5 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - require:
       - file: /etc/nginx/sites-available/proxy.conf
     - prereq:
-      - pkg: nginx
+      - service: nginx
 
