@@ -10,8 +10,6 @@ include:
     - user: root
     - group: root
     - mode: 0755
-    - require:
-      - pkg: nginx
 
 openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rsa:1024 -keyout {{ nginx_proxy.key }} -out {{ nginx_proxy.cert }}:
   cmd.run:
@@ -19,8 +17,18 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - user: root
     - shell: /bin/bash
     - require:
-      - pkg: nginx
       - file: /etc/nginx/ssl.conf
+    - prereq:
+      - file: /etc/nginx/sites-available/proxy.conf
+      - pkg: nginx
+
+/etc/nginx/sites-available:
+  file.directory:
+    - user: www-data
+    - group: www-data
+    - mode: 0755
+    - prereq:
+      - pkg: nginx
 
 /etc/nginx/sites-available/proxy.conf:
   file.managed:
@@ -33,7 +41,7 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - user: www-data
     - group: www-data
     - mode: 0755
-    - require:
+    - prereq:
       - pkg: nginx
 
 /etc/nginx/sites-enabled/proxy.conf:
@@ -42,4 +50,6 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - force: false
     - require:
       - file: /etc/nginx/sites-available/proxy.conf
+    - prereq:
+      - pkg: nginx
 
