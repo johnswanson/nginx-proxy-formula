@@ -22,16 +22,9 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
       - file: /etc/nginx/sites-available/proxy.conf
       - pkg: nginx
 
-/etc/nginx/sites-available:
-  file.directory:
-    - user: www-data
-    - group: www-data
-    - mode: 0755
-    - prereq:
-      - pkg: nginx
-
 /etc/nginx/sites-available/proxy.conf:
   file.managed:
+    - makedirs: true
     - source: salt://nginx-proxy/proxy.conf
     - template: jinja
     - context:
