@@ -1,7 +1,14 @@
 {% from "nginx-proxy/map.jinja" import nginx_proxy with context %}
 
-include:
-  - nginx
+nginx:
+  pkg.installed
+  service.running:
+    - reload: True
+    - require:
+      - file: /etc/nginx/sites-enabled/proxy.conf
+      - pkg: nginx
+    - watch:
+      - file: /etc/nginx/sites-enabled/proxy.conf
 
 /etc/nginx/ssl.conf:
   file.managed:
