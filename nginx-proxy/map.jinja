@@ -1,5 +1,6 @@
 {% set nginx_proxy = salt['grains.filter_by']({
     'x86_64': {
+        'ssl': True,
         'ssl_redirect': '80',
         'to_port': '8080',
         'from_port': '443',
@@ -9,6 +10,7 @@
         'key': '/etc/nginx/nginx.key'
     },
     'x86': {
+        'ssl': True,
         'ssl_redirect': '80',
         'to_port': '8080',
         'from_port': '443',

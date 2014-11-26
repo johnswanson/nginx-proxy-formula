@@ -35,6 +35,7 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - source: salt://nginx-proxy/proxy.conf
     - template: jinja
     - context:
+      ssl: {{ nginx_proxy.ssl }}
       ssl_redirect: {{ nginx_proxy.ssl_redirect }}
       to_port: {{ nginx_proxy.to_port }}
       to_host: {{ nginx_proxy.to_host }}
