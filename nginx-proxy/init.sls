@@ -1,7 +1,8 @@
 {% from "nginx-proxy/map.jinja" import nginx_proxy with context %}
 
 nginx:
-  pkg.installed
+  pkg.installed:
+    - refresh: True
   service.running:
     - reload: True
     - require:
@@ -27,7 +28,6 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
       - file: /etc/nginx/ssl.conf
     - prereq:
       - file: /etc/nginx/sites-available/proxy.conf
-      - service: nginx
 
 /etc/nginx/sites-available/proxy.conf:
   file.managed:
@@ -41,8 +41,6 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - user: www-data
     - group: www-data
     - mode: 0755
-    - prereq:
-      - service: nginx
 
 /etc/nginx/sites-enabled/proxy.conf:
   file.symlink:
@@ -50,6 +48,4 @@ openssl req -x509 -batch -config /etc/nginx/ssl.conf -nodes -days 365 -newkey rs
     - force: false
     - require:
       - file: /etc/nginx/sites-available/proxy.conf
-    - prereq:
-      - service: nginx
 
